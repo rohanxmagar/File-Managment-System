@@ -65,7 +65,7 @@
     <!-- Breadcrumbs Section -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb" id="breadcrumb">
-            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link" data-page="academics.php">Students</a></li>
+            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link" data-page="academics.php">Stuents</a></li>
         </ol>
     </nav>
 

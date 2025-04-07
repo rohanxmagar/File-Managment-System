@@ -23,7 +23,7 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a href="#" class="nav-link text-white menu-item" data-page="students">
-                        <i class="fas fa-user-graduate"></i>Students
+                        <i class="fas fa-user-graduate"></i>Registration
                     </a>
                 </li>
                 <li class="nav-item">
@@ -33,7 +33,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link text-white menu-item" data-page="institution">
-                        <i class="fas fa-university"></i> Institution
+                        <i class="fas fa-university"></i> Records
                     </a>
                 </li>
                 <li class="nav-item">

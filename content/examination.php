@@ -1,4 +1,4 @@
-<?php
+ <?php
 include "../backend/config.php"; // Database connection file
 
     try {
@@ -9,7 +9,6 @@ include "../backend/config.php"; // Database connection file
         die("Database error: " . $e->getMessage());
     }
 ?>
-
 <div class="container">
     <!-- Breadcrumbs Section -->
     <nav aria-label="breadcrumb">
@@ -18,299 +17,100 @@ include "../backend/config.php"; // Database connection file
             <li class="breadcrumb-item">Examination</li>
         </ol>
     </nav>
+<div class="container mt-4">
+    <h4>Examination</h4>
+    <p>Select academic year, semester, and assessment to view results.</p>
 
-    <h3>Examination</h3>
-    <p>Select the examination type.</p>
-
-    <!-- Form Container -->
-    <form id="affiliation-form">
-        <div class="row g-3 align-items-center">
-            <div class="col-md-4">
-                <label for="affiliation" class="form-label">examination type</label>
-                <select class="form-select" id="affiliation" name="affiliation">
-                    <option value="">Select examination</option>
-                    <?php foreach ($examinations as $examination) : ?>
-                        <option value="<?= $examination['id'] ?>"><?= $examination['examination_name'] ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div class="col-md-4" id="academic-year-container" style="display:none;">
-                <label for="academic-year" class="form-label">Academic Year</label>
-                <select class="form-select" id="academic-year" name="academic-year">
-                    <option value="">Select Academic Year</option>
-                </select>
-            </div>
-
-            <div class="col-md-4" id="university-options-container" style="display:none;">
-                <label for="university-options" class="form-label">University Options</label>
-                <select class="form-select" id="university-options" name="university-options">
-                    <option value="">Select Option</option>
-                </select>
-            </div>
+    <div class="row g-3">
+        <!-- Academic Year -->
+        <div class="col-md-4">
+            <label>Academic Year</label>
+            <select id="academic-year" class="form-select">
+                <option value="">Select Academic Year</option>
+                <?php
+                $stmt = $conn->query("SELECT year FROM academic_years ORDER BY year DESC");
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<option value='{$row['year']}'>{$row['year']}</option>";
+                }
+                ?>
+            </select>
         </div>
 
-        <!-- Buttons: Submit + Add -->
-        <div class="mt-3 d-flex align-items-center">
-            <button type="button" class="btn btn-primary me-2" id="fetch-documents">
-                <i class="fas fa-search"></i> Submit
-            </button>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">
-                <i class="fas fa-plus"></i> Add
-            </button>
+        <!-- Semester -->
+        <div class="col-md-4">
+            <label>Semester Type</label>
+            <select id="semester" class="form-select">
+                <option value="">Select Semester</option>
+                <option value="odd">Odd Semester</option>
+                <option value="even">Even Semester</option>
+            </select>
         </div>
-    </form>
 
-    <!-- Table for Showing Documents -->
-    <div class="mt-4">
-        <h4>Document List</h4>
-        <table class="table table-bordered table-striped" id="documents-table">
-            <thead class="table-dark">
-                <tr>
-                    <th>File Name</th>
-                    <th>Last Modified</th>
-                    <th>File View</th>
-                    <th>Office Location</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="4" class="text-center">No records found</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+        <!-- Assessment Type -->
+        <div class="col-md-4">
+            <label>Assessment Type</label>
+            <select id="assessment" class="form-select">
+                <option value="">Select Assessment</option>
+                <option value="internal">Internal Assessment</option>
+                <option value="endsem">End Semester</option>
+                <option value="others">Others</option>
+            </select>
+        </div>
 
-<!-- 🔹 Modal with Dynamic Dropdowns -->
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Add New Document</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+        <!-- Component -->
+        <div class="col-md-4" id="component-container" style="display: none;">
+            <label>Component</label>
+            <select id="component" class="form-select">
+                <option value="">Select Component</option>
+            </select>
+        </div>
 
-                <form id="addDocumentForm" enctype="multipart/form-data" method="post">
-
-                    <!-- 🔹 Dynamic Affiliation Type -->
-                    <div class="mb-3">
-                        <label class="form-label">Affiliation Type</label>
-                        <select class="form-select" id="modal-affiliation" name="affiliation">
-                            <option value="">Select Affiliation</option>
-                        </select>
-                    </div>
-
-                    <!-- 🔹 Academic Year -->
-                    <div class="mb-3">
-                        <label class="form-label">Academic Year</label>
-                        <select class="form-select" id="modal-academic-year" name="academic-year">
-                            <option value="">Select Academic Year</option>
-                        </select>
-                    </div>
-                    
-
-                    <!-- 🔹 University Options (Shown only when University is selected) -->
-                    <div class="mb-3" id="modal-university-container" style="display:none;">
-                        <label class="form-label">University Options</label>
-                        <select class="form-select" id="modal-university-options" name="university-options">
-                            <option value="">Select Option</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">File Name</label>
-                        <input type="text" class="form-control" id="file-name" name="file-name" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">File Location</label>
-                        <input type="text" class="form-control" id="file-location" name="file-location" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Upload File</label>
-                        <input type="file" class="form-control" id="file-upload" name="file-upload" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-success">Save</button>
-                </form>
-            </div>
+        <!-- Submit -->
+        <div class="col-md-12 mt-3">
+            <button class="btn btn-primary" id="load-result" disabled>View Results</button>
         </div>
     </div>
+
+    <!-- Results -->
+    <div id="result-box" class="mt-4"></div>
 </div>
 
-<!-- JavaScript (AJAX for Dynamic Dropdowns) -->
 <script>
-$(document).ready(function() {
-    // Load Affiliation Types from Database
-    function loadAffiliationTypes() {
-        $.ajax({
-            url: './backend/get_affiliations.php',
-            type: 'GET',
-            success: function(response) {
-                var affiliations = JSON.parse(response);
-                var affiliationSelect = $("#modal-affiliation");
-                affiliationSelect.empty();
-                affiliationSelect.append('<option value="">Select Affiliation</option>');
-                $.each(affiliations, function(index, affiliation) {
-                    affiliationSelect.append('<option value="'+affiliation.id+'">'+affiliation.affiliation_name+'</option>');
-                });
-            }
-        });
-    }
+$(document).ready(function () {
+    $('#assessment').change(function () {
+        let assessment = $(this).val();
+        let $comp = $('#component');
+        $comp.empty();
 
-    // Load Academic Years
-    function loadAcademicYears() {
-        $.ajax({
-            url: './backend/get_academic_year.php',
-            type: 'GET',
-            success: function(response) {
-                var years = JSON.parse(response);
-                var yearSelect = $("#modal-academic-year");
-                yearSelect.empty();
-                yearSelect.append('<option value="">Select Academic Year</option>');
-                $.each(years, function(index, year) {
-                    yearSelect.append('<option value="'+year.id+'">'+year.year+'</option>');
-                });
-            }
-        });
-    }
-
-    loadAffiliationTypes(); // Call function to populate affiliations on page load
-    loadAcademicYears(); // Call function to populate academic years on page load
-
-    // Show University Options Based on Selection
-    $("#modal-affiliation").change(function() {
-        var selectedValue = $(this).val();
-        if (selectedValue == "1") {
-            $("#modal-university-container").show();
-            loadUniversityOptions();
-        } else {
-            $("#modal-university-container").hide();
-            $("#modal-university-options").empty();
-        }
-    });
-
-    // Fetch University Options
-    function loadUniversityOptions() {
-        $.ajax({
-            url: './backend/get_university_options.php',
-            type: 'GET',
-            success: function(response) {
-                var options = JSON.parse(response);
-                var universitySelect = $("#modal-university-options");
-                universitySelect.empty();
-                universitySelect.append('<option value="">Select Option</option>');
-                $.each(options, function(index, option) {
-                    universitySelect.append('<option value="'+option.id+'">'+option.option_name+'</option>');
-                });
-            }
-        });
-    }
-
-    // Load Academic Year & University Options
-    $("#affiliation").change(function() {
-        var affiliationId = $(this).val();
-        $("#academic-year-container, #university-options-container").hide();
-        $("#academic-year, #university-options").empty();
-
-        if (affiliationId) {
-            $.ajax({
-                url: './backend/get_academic_years.php',
-                type: 'GET',
-                data: { affiliation_id: affiliationId },
-                success: function(data) {
-                    if (data) {
-                        var academicYears = JSON.parse(data);
-                        $("#academic-year").append('<option value="">Select Academic Year</option>');
-                        $.each(academicYears, function(i, year) {
-                            $("#academic-year").append('<option value="' + year.id + '">' + year.year + '</option>');
-                        });
-                        $("#academic-year-container").show();
-
-                        if (affiliationId == 1) {
-                            $.ajax({
-                                url: './backend/get_university_options.php',
-                                type: 'GET',
-                                success: function(optionsData) {
-                                    var options = JSON.parse(optionsData);
-                                    $("#university-options").append('<option value="">Select Option</option>');
-                                    $.each(options, function(i, option) {
-                                        $("#university-options").append('<option value="' + option.id + '">' + option.option_name + '</option>');
-                                    });
-                                    $("#university-options-container").show();
-                                }
-                            });
-                        }
-                    }
-                }
+        if (assessment === 'internal') {
+            ['CA1','CA2','CA3','CA4','PCA1','PCA2'].forEach(comp => {
+                $comp.append(`<option value="${comp}">${comp}</option>`);
             });
+        } else if (assessment === 'endsem') {
+            $comp.append(`<option value="Semester Result">Semester Result</option>`);
+        } else if (assessment === 'others') {
+            $comp.append(`<option value="Other Assessment">Other Assessment</option>`);
         }
+
+        $('#component-container').show();
+        $('#load-result').prop('disabled', false);
     });
 
-    // Fetch Documents on Submission
-    $("#fetch-documents").click(function() {
-        var affiliationId = $("#affiliation").val();
-        var academicYearId = $("#academic-year").val();
-        var universityOptionId = $("#university-options").val();
+    $('#load-result').click(function () {
+        let data = {
+            year: $('#academic-year').val(),
+            semester: $('#semester').val(),
+            assessment: $('#assessment').val(),
+            component: $('#component').val()
+        };
 
-        $.ajax({
-            url: './backend/get_documents.php',
-            type: 'POST',
-            data: { 
-                affiliation_id: affiliationId, 
-                academic_year_id: academicYearId, 
-                university_option_id: universityOptionId 
-            },
-            success: function(response) {
-                var documents = JSON.parse(response);
-                var tableBody = $("#documents-table tbody");
-                tableBody.empty();
+        if (!data.year || !data.semester || !data.assessment || !data.component) {
+            alert("Please fill in all fields.");
+            return;
+        }
 
-                if (documents.length > 0) {
-                    $.each(documents, function(i, doc) {
-                        tableBody.append(
-                            '<tr>' +
-                                '<td>' + doc.file_name + '</td>' +
-                                '<td>' + doc.last_modified + '</td>' +
-                                '<td><a href="' + doc.file_path + '" target="_blank" class="btn btn-info btn-sm">View</a></td>' +
-                                '<td>' + doc.office_location + '</td>' +
-                            '</tr>'
-                        );
-                    });
-                } else {
-                    tableBody.append('<tr><td colspan="4" class="text-center">No records found</td></tr>');
-                }
-            }
-        });
-    });
-
-    // Add New Document
-    $('#addDocumentForm').on('submit', function(e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-
-        $.ajax({
-            url: './backend/add_document.php',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                var res = JSON.parse(response);
-                if (res.status === "success") {
-                    alert(res.message);
-                    $('#addModal').modal('hide');
-                    $('#addDocumentForm')[0].reset();
-                } else {
-                    alert(res.message);
-                }
-            },
-            error: function() {
-                alert("Error uploading file. Please try again.");
-            }
+        $.post('backend/fetch_examination_results.php', data, function (html) {
+            $('#result-box').html(html);
         });
     });
 });
