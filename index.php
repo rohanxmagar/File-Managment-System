@@ -27,6 +27,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="academics.php" class="nav-link text-white menu-item" data-page="approval">
+                        <i class="fas fa-book-open"></i> Affiliation & Approval
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="academics.php" class="nav-link text-white menu-item" data-page="academics">
                         <i class="fas fa-book-open"></i> Academics
                     </a>

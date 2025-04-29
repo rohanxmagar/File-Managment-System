@@ -73,13 +73,7 @@
     <p>Manage academic activities, approvals, and examinations.</p>
 
     <div class="container1">
-        <!-- Affiliation & Approval Box -->
-        <a href="#" >
-            <div class="card option-box1" data-page="./affiliation.php">
-                <img src="./content/approval.png" alt="approval icon" height="75px">
-                <p>Affilation & Approval</p>
-            </div>
-        </a>
+   
 
         <!-- Examination Box -->
         <a href="#" >
@@ -88,8 +82,5 @@
                 <p>Examination</p>
             </div>
         </a>
-    <!-- Content Section -->
-    <div id="academic-content" class="mt-4"></div>
-</div>
-
+    </div>
 <script src="./script/option-box.js"></script>

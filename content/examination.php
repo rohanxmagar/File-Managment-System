@@ -1,19 +1,19 @@
- <?php
+<?php
 include "../backend/config.php"; // Database connection file
 
-    try {
-        $stmt = $conn->prepare("SELECT id, examination_name FROM examination_data");
-        $stmt->execute();
-        $examinations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        die("Database error: " . $e->getMessage());
-    }
+try {
+    $stmt = $conn->prepare("SELECT id, examination_name FROM examination_data");
+    $stmt->execute();
+    $examinations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
 ?>
 <div class="container">
     <!-- Breadcrumbs Section -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb" id="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"class="breadcrumb-link" data-page="academics.php">Academics</a></li>
+            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link" data-page="academics.php">Academics</a></li>
             <li class="breadcrumb-item">Examination</li>
         </ol>
     </nav>
@@ -53,7 +53,29 @@ include "../backend/config.php"; // Database connection file
                 <option value="">Select Assessment</option>
                 <option value="internal">Internal Assessment</option>
                 <option value="endsem">End Semester</option>
-                <option value="others">Others</option>
+                <option value="enrollment">Enrollment</option>
+                <option value="results">Results</option>
+            </select>
+        </div>
+
+        <!-- End Sem Type -->
+        <div class="col-md-4" id="endsem-type-container" style="display: none;">
+            <label>End Sem Type</label>
+            <select id="endsem-type" class="form-select">
+                <option value="">Select Type</option>
+                <option value="theory">Theory</option>
+                <option value="examform">Exam Form Fill-up</option>
+                <option value="practical">Practical</option>
+            </select>
+        </div>
+
+        <!-- Enrollment Type -->
+        <div class="col-md-4" id="enrollment-type-container" style="display: none;">
+            <label>Enrollment Type</label>
+            <select id="enrollment-type" class="form-select">
+                <option value="">Select Enrollment</option>
+                <option value="regular">Regular</option>
+                <option value="backlog">Backlog</option>
             </select>
         </div>
 
@@ -81,15 +103,44 @@ $(document).ready(function () {
         let assessment = $(this).val();
         let $comp = $('#component');
         $comp.empty();
+        $('#component-container').hide();
+        $('#endsem-type-container').hide();
+        $('#enrollment-type-container').hide();
+        $('#load-result').prop('disabled', true);
 
         if (assessment === 'internal') {
             ['CA1','CA2','CA3','CA4','PCA1','PCA2'].forEach(comp => {
                 $comp.append(`<option value="${comp}">${comp}</option>`);
             });
+            $('#component-container').show();
+            $('#load-result').prop('disabled', false);
         } else if (assessment === 'endsem') {
-            $comp.append(`<option value="Semester Result">Semester Result</option>`);
-        } else if (assessment === 'others') {
+            $('#endsem-type-container').show();
+        } else if (assessment === 'enrollment') {
+            $('#enrollment-type-container').show();
+            $('#load-result').prop('disabled', false);
+        } else if (assessment === 'results') {
             $comp.append(`<option value="Other Assessment">Other Assessment</option>`);
+            $('#component-container').show();
+            $('#load-result').prop('disabled', false);
+        }
+    });
+
+    $('#endsem-type').change(function () {
+        const type = $(this).val();
+        const $comp = $('#component');
+        $comp.empty();
+
+        if (type === 'theory') {
+            ['Routine', 'Seating Arrangement', 'Attendance'].forEach(c => {
+                $comp.append(`<option value="${c}">${c}</option>`);
+            });
+        } else if (type === 'practical') {
+            ['Routine', 'Attendance'].forEach(c => {
+                $comp.append(`<option value="${c}">${c}</option>`);
+            });
+        } else if (type === 'examform') {
+            $comp.append(`<option value="Exam Form">Exam Form</option>`);
         }
 
         $('#component-container').show();
@@ -101,10 +152,14 @@ $(document).ready(function () {
             year: $('#academic-year').val(),
             semester: $('#semester').val(),
             assessment: $('#assessment').val(),
+            endsem_type: $('#endsem-type').val(),
+            enrollment_type: $('#enrollment-type').val(),
             component: $('#component').val()
         };
 
-        if (!data.year || !data.semester || !data.assessment || !data.component) {
+        if (!data.year || !data.semester || !data.assessment || 
+            (data.assessment === 'endsem' && !data.endsem_type) ||
+            (data.assessment === 'enrollment' && !data.enrollment_type)) {
             alert("Please fill in all fields.");
             return;
         }
