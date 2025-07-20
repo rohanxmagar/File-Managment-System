@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 29, 2025 at 09:04 AM
+-- Host: localhost
+-- Generation Time: Jul 20, 2025 at 08:41 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -67,6 +67,47 @@ INSERT INTO `affiliation_data` (`id`, `affiliation_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `batch_years`
+--
+
+CREATE TABLE `batch_years` (
+  `id` int(11) NOT NULL,
+  `year` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `batch_years`
+--
+
+INSERT INTO `batch_years` (`id`, `year`) VALUES
+(1, 2018),
+(2, 2019),
+(3, 2020);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `departments`
+--
+
+CREATE TABLE `departments` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `departments`
+--
+
+INSERT INTO `departments` (`id`, `name`) VALUES
+(1, 'BCA'),
+(2, 'BMAGD'),
+(3, 'BBA GB'),
+(4, 'BB ATA');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `documents`
 --
 
@@ -89,120 +130,109 @@ INSERT INTO `documents` (`id`, `affiliation_id`, `academic_year_id`, `university
 (1, 1, 1, 1, 'Affiliation_Doc1.pdf', '2025-02-19 07:22:14', 'uploads/Affiliation_Doc1.pdf', 'Office A1'),
 (2, 1, 1, 2, 'Exam_Report.xlsx', '2025-02-19 07:22:14', 'uploads/Exam_Report.xlsx', 'Office B2'),
 (3, 2, 3, NULL, 'College_Policy.pdf', '2025-02-19 07:57:08', 'uploads/College_Policy.pdf', 'Office C3'),
-(4, 2, NULL, NULL, 'abc descr', '2025-02-19 11:27:48', '../uploads/2nd_semester_Attendance_Report-output.pdf', 'Lab-001/ bookshelf/ A1');
+(4, 2, NULL, NULL, 'abc descr', '2025-02-19 11:27:48', '../uploads/2nd_semester_Attendance_Report-output.pdf', 'Lab-001/ bookshelf/ A1'),
+(23, 1, 2, 1, 'Sourasish roy Resume draft 1.pdf', '2025-07-19 20:19:12', 'uploads/affiliation/1/2/1/Sourasish roy Resume draft 1.pdf', 'gdg'),
+(24, 1, 2, 1, 'Sourasish roy Resume draft 1.pdf', '2025-07-19 20:21:05', 'uploads/affiliation/1/2/1/Sourasish roy Resume draft 1.pdf', 'rk'),
+(25, 1, 3, 1, 'Sourasish roy Resume draft 1.pdf', '2025-07-19 20:24:14', 'uploads/affiliation/1/3/1/Sourasish roy Resume draft 1.pdf', 'dfwe'),
+(26, 2, 2, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:25:08', 'uploads/affiliation/2/2/Sourasish roy Resume draft 1.pdf', 'gb'),
+(27, 3, 2, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:25:36', 'uploads/affiliation/3/2/Sourasish roy Resume draft 1.pdf', 'gnn'),
+(28, 4, 2, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:28:08', 'uploads/affiliation/4/2/Sourasish roy Resume draft 1.pdf', 'csc'),
+(29, 4, 3, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:28:45', 'uploads/affiliation/4/3/Sourasish roy Resume draft 1.pdf', 'wd'),
+(30, 4, 1, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:32:09', 'uploads/affiliation/4/1/Sourasish roy Resume draft 1.pdf', 'dd'),
+(31, 2, 2, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:35:37', 'uploads/affiliation/2/2/Sourasish roy Resume draft 1.pdf', 'edw'),
+(32, 3, 2, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:38:55', 'uploads/affiliation/3/2/Sourasish roy Resume draft 1.pdf', 'x'),
+(33, 4, 4, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:39:54', 'uploads/affiliation/4/4/Sourasish roy Resume draft 1.pdf', 'c'),
+(34, 3, 1, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:41:26', 'uploads/affiliation/3/1/Sourasish roy Resume draft 1.pdf', 'qs'),
+(35, 2, 1, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 03:41:54', 'uploads/affiliation/2/1/Sourasish roy Resume draft 1.pdf', 'fbv'),
+(36, 3, 2, NULL, 'Sourasish roy Resume draft 1.pdf', '2025-07-20 06:28:50', 'uploads/affiliation/3/2/Sourasish roy Resume draft 1.pdf', 'da');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `end_semester_components`
+-- Table structure for table `examination_files`
 --
 
-CREATE TABLE `end_semester_components` (
+CREATE TABLE `examination_files` (
   `id` int(11) NOT NULL,
-  `type` enum('theory','practical','examform') NOT NULL,
-  `component_name` varchar(100) NOT NULL
+  `academic_year` varchar(9) NOT NULL,
+  `semester_type` enum('Odd','Even') NOT NULL,
+  `main_category` enum('Assessment Type','End Sem','Enrollment','Results') NOT NULL,
+  `assessment_component` enum('CA1','CA2','CA3','CA4','PCA1','PCA2') DEFAULT NULL,
+  `endsem_component` enum('Theory','Practical','Exam Form Fill Up') DEFAULT NULL,
+  `theory_subcomponent` enum('Seating Allotment','Attendance','Routine') DEFAULT NULL,
+  `enrollment_type` enum('Regular','Backlog') DEFAULT NULL,
+  `results_type` enum('Regular','Backlog') DEFAULT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_path` varchar(500) NOT NULL,
+  `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `end_semester_components`
+-- Dumping data for table `examination_files`
 --
 
-INSERT INTO `end_semester_components` (`id`, `type`, `component_name`) VALUES
-(1, 'theory', 'Routine'),
-(2, 'theory', 'Seating Arrangement'),
-(3, 'theory', 'Attendance'),
-(4, 'practical', 'Routine'),
-(5, 'practical', 'Attendance'),
-(6, 'examform', 'Exam Form');
+INSERT INTO `examination_files` (`id`, `academic_year`, `semester_type`, `main_category`, `assessment_component`, `endsem_component`, `theory_subcomponent`, `enrollment_type`, `results_type`, `file_name`, `file_path`, `uploaded_at`) VALUES
+(1, '2024-2025', 'Odd', 'End Sem', NULL, 'Theory', 'Seating Allotment', NULL, NULL, 'Sourasish roy Resume draft 1.pdf', 'uploads/examination/2024-2025/Odd/End Sem/Theory/Seating Allotment/Sourasish roy Resume draft 1.pdf', '2025-07-19 19:43:29'),
+(2, '2024-2025', 'Odd', 'Assessment Type', 'CA1', NULL, NULL, NULL, NULL, 'Sourasish roy Resume draft 1.pdf', 'uploads/examination/2024-2025/Odd/Assessment Type/CA1/Sourasish roy Resume draft 1.pdf', '2025-07-19 19:58:04');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `enrollment_categories`
+-- Table structure for table `government_scholarship_subtypes`
 --
 
-CREATE TABLE `enrollment_categories` (
+CREATE TABLE `government_scholarship_subtypes` (
   `id` int(11) NOT NULL,
-  `category` enum('regular','backlog') NOT NULL
+  `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `enrollment_categories`
+-- Dumping data for table `government_scholarship_subtypes`
 --
 
-INSERT INTO `enrollment_categories` (`id`, `category`) VALUES
-(1, 'regular'),
-(2, 'backlog');
+INSERT INTO `government_scholarship_subtypes` (`id`, `name`) VALUES
+(1, 'SVMCN'),
+(2, 'WBSC'),
+(3, 'NSP'),
+(4, 'WBMDFC'),
+(5, 'E-KALYAN');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `examination_data`
+-- Table structure for table `scholarship_types`
 --
 
-CREATE TABLE `examination_data` (
+CREATE TABLE `scholarship_types` (
   `id` int(11) NOT NULL,
-  `examination_name` varchar(255) DEFAULT NULL
+  `type` enum('government','in_house') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `examination_data`
+-- Dumping data for table `scholarship_types`
 --
 
-INSERT INTO `examination_data` (`id`, `examination_name`) VALUES
-(1, 'Paper Evaluation'),
-(2, 'Results'),
-(3, 'Exams');
+INSERT INTO `scholarship_types` (`id`, `type`) VALUES
+(1, 'government'),
+(2, 'in_house');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `examination_results`
+-- Table structure for table `student_files`
 --
 
-CREATE TABLE `examination_results` (
+CREATE TABLE `student_files` (
   `id` int(11) NOT NULL,
-  `academic_year` varchar(20) NOT NULL,
-  `semester` enum('odd','even') NOT NULL,
-  `assessment_type` varchar(50) NOT NULL,
-  `component` varchar(50) NOT NULL,
-  `student_name` varchar(100) NOT NULL,
-  `marks` int(11) NOT NULL
+  `manage_type` enum('student_list','scholarship','apaar') NOT NULL,
+  `batch_year_id` int(11) DEFAULT NULL,
+  `department_id` int(11) DEFAULT NULL,
+  `scholarship_type_id` int(11) DEFAULT NULL,
+  `govt_scholarship_subtype_id` int(11) DEFAULT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `examination_results`
---
-
-INSERT INTO `examination_results` (`id`, `academic_year`, `semester`, `assessment_type`, `component`, `student_name`, `marks`) VALUES
-(1, '2021-2022', 'even', 'internal', 'CA1', 'Amit Roy', 18),
-(2, '2021-2022', 'even', 'internal', 'CA2', 'Amit Roy', 20),
-(3, '2021-2022', 'even', 'internal', 'PCA1', 'Amit Roy', 15),
-(4, '2021-2022', 'even', 'endsem', 'Semester Result', 'Amit Roy', 72),
-(5, '2022-2023', 'odd', 'internal', 'CA1', 'Sonal Das', 19),
-(6, '2022-2023', 'odd', 'internal', 'CA2', 'Sonal Das', 20),
-(7, '2022-2023', 'odd', 'internal', 'PCA1', 'Sonal Das', 18),
-(8, '2022-2023', 'odd', 'endsem', 'Semester Result', 'Sonal Das', 69);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `result_option`
---
-
-CREATE TABLE `result_option` (
-  `id` int(11) NOT NULL,
-  `result_type` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `result_option`
---
-
-INSERT INTO `result_option` (`id`, `result_type`) VALUES
-(1, 'CA'),
-(2, 'PCA'),
-(3, 'SEMESTER');
 
 -- --------------------------------------------------------
 
@@ -245,8 +275,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `created_at`, `updated_at`) VALUES
-(4, 'admin', '$2y$10$ZcDo4wOXi1mQQh2SO5neSO0kAx/C15Yr/CxsGU9eUQNsps5oEDVCq', 'admin@pass.com', '2025-02-18 10:56:47', '2025-02-18 10:56:47'),
-(5, 'user', '123', 'ser@gmail.com', '2025-03-19 09:44:55', '2025-03-19 09:44:55');
+(4, 'admin', '$2y$10$ZcDo4wOXi1mQQh2SO5neSO0kAx/C15Yr/CxsGU9eUQNsps5oEDVCq', 'admin@pass.com', '2025-02-18 10:56:47', '2025-02-18 10:56:47');
 
 --
 -- Indexes for dumped tables
@@ -266,6 +295,19 @@ ALTER TABLE `affiliation_data`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `batch_years`
+--
+ALTER TABLE `batch_years`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `year` (`year`);
+
+--
+-- Indexes for table `departments`
+--
+ALTER TABLE `departments`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `documents`
 --
 ALTER TABLE `documents`
@@ -275,34 +317,32 @@ ALTER TABLE `documents`
   ADD KEY `university_option_id` (`university_option_id`);
 
 --
--- Indexes for table `end_semester_components`
+-- Indexes for table `examination_files`
 --
-ALTER TABLE `end_semester_components`
+ALTER TABLE `examination_files`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `enrollment_categories`
+-- Indexes for table `government_scholarship_subtypes`
 --
-ALTER TABLE `enrollment_categories`
+ALTER TABLE `government_scholarship_subtypes`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `examination_data`
+-- Indexes for table `scholarship_types`
 --
-ALTER TABLE `examination_data`
+ALTER TABLE `scholarship_types`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `examination_results`
+-- Indexes for table `student_files`
 --
-ALTER TABLE `examination_results`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `result_option`
---
-ALTER TABLE `result_option`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `student_files`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `batch_year_id` (`batch_year_id`),
+  ADD KEY `department_id` (`department_id`),
+  ADD KEY `scholarship_type_id` (`scholarship_type_id`),
+  ADD KEY `govt_scholarship_subtype_id` (`govt_scholarship_subtype_id`);
 
 --
 -- Indexes for table `university_options`
@@ -336,40 +376,46 @@ ALTER TABLE `affiliation_data`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `documents`
+-- AUTO_INCREMENT for table `batch_years`
 --
-ALTER TABLE `documents`
+ALTER TABLE `batch_years`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `departments`
+--
+ALTER TABLE `departments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `end_semester_components`
+-- AUTO_INCREMENT for table `documents`
 --
-ALTER TABLE `end_semester_components`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+ALTER TABLE `documents`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
--- AUTO_INCREMENT for table `enrollment_categories`
+-- AUTO_INCREMENT for table `examination_files`
 --
-ALTER TABLE `enrollment_categories`
+ALTER TABLE `examination_files`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `examination_data`
+-- AUTO_INCREMENT for table `government_scholarship_subtypes`
 --
-ALTER TABLE `examination_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `government_scholarship_subtypes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `examination_results`
+-- AUTO_INCREMENT for table `scholarship_types`
 --
-ALTER TABLE `examination_results`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+ALTER TABLE `scholarship_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `result_option`
+-- AUTO_INCREMENT for table `student_files`
 --
-ALTER TABLE `result_option`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `student_files`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `university_options`
@@ -381,7 +427,7 @@ ALTER TABLE `university_options`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -400,6 +446,15 @@ ALTER TABLE `documents`
   ADD CONSTRAINT `documents_ibfk_1` FOREIGN KEY (`affiliation_id`) REFERENCES `affiliation_data` (`id`),
   ADD CONSTRAINT `documents_ibfk_2` FOREIGN KEY (`academic_year_id`) REFERENCES `academic_years` (`id`),
   ADD CONSTRAINT `documents_ibfk_3` FOREIGN KEY (`university_option_id`) REFERENCES `university_options` (`id`);
+
+--
+-- Constraints for table `student_files`
+--
+ALTER TABLE `student_files`
+  ADD CONSTRAINT `student_files_ibfk_1` FOREIGN KEY (`batch_year_id`) REFERENCES `batch_years` (`id`),
+  ADD CONSTRAINT `student_files_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`),
+  ADD CONSTRAINT `student_files_ibfk_3` FOREIGN KEY (`scholarship_type_id`) REFERENCES `scholarship_types` (`id`),
+  ADD CONSTRAINT `student_files_ibfk_4` FOREIGN KEY (`govt_scholarship_subtype_id`) REFERENCES `government_scholarship_subtypes` (`id`);
 
 --
 -- Constraints for table `university_options`
